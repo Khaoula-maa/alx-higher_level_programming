@@ -1,35 +1,29 @@
 #!/usr/bin/python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tru Jun 3 15:13:37 2020
-
-@author: Robinson Montes
-"""
+"""This module defines a class Student"""
 
 
 class Student:
-    """
-    Student class
-    """
-    def __init__(self, first_name, last_name, age):
-        """
-        init method for Student class
+    """Represent a student."""
 
-        Attributes:
-            first_name (str): The first name of the student
-            last_name (str): The last name of the student
-            age (int): The age of the student
+    def __init__(self, first_name, last_name, age):
+        """Initializes a new Student
         """
         self.first_name = first_name
         self.last_name = last_name
         self.age = age
 
-    def to_json(self):
+    def to_json(self, attrs=None):
+        """Gets a dictionary representation of the Student.
+        If attrs is a list of strings, represents only those attributes
+        included in the list
         """
-        Represents of Student into json format
+        if (type(attrs) == list and
+                all(type(ele) == str for ele in attrs)):
+            return {k: getattr(self, k) for k in attrs if hasattr(self, k)}
+        return self.__dict__
 
-        Return:
-            Student class as a json format
+    def reload_from_json(self, json):
+        """Replaces all attributes of the Student
         """
-        return {key: value for (key, value) in self.__dict__.items()
-                if key in list(self.__dict__.keys())}
+        for k, v in json.items():
+            setattr(self, k, v)
